@@ -1,0 +1,11 @@
+{
+    "require": {
+        "fzaninotto/faker": "~1.4",
+        "phpunit/php-timer": "~1"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "src"
+        }
+    }
+}
