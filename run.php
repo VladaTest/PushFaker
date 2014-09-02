@@ -8,6 +8,7 @@ date_default_timezone_set('UTC');
 
 require('vendor/autoload.php');
 require('config.php');
+require('StatsD.php');
 
 // create cache_dir
 if (!file_exists($config['cache_dir'])) {
@@ -64,4 +65,5 @@ $clientData['to'] = date('Y-m-d H:i:s', time());
 file_put_contents($config['cache_dir'] . '/' . $client, json_encode($clientData));
 
 // Push time + request
-//
+StatsD::increment($operation . ' - count');
+StatsD::timing($operation . ' - response time', str_replace(' ms', '', PHP_Timer::secondsToTimeString($time)));
