@@ -8,7 +8,6 @@ class Percona extends Provider
 {
     public function runPush($data)
     {
-        var_dump($data);exit;
         usleep(rand(1000, 1000000));
     }
 

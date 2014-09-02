@@ -8,7 +8,6 @@ date_default_timezone_set('UTC');
 
 require('vendor/autoload.php');
 require('config.php');
-require('stathat.php');
 
 // create cache_dir
 if (!file_exists($config['cache_dir'])) {
