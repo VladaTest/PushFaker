@@ -65,5 +65,4 @@ $clientData['to'] = date('Y-m-d H:i:s', time());
 file_put_contents($config['cache_dir'] . '/' . $client, json_encode($clientData));
 
 // Push time + request
-stathat_ez_value('test4fun', $operation . ' - response time', PHP_Timer::secondsToTimeString($time));
-stathat_ez_count('test4fun', $operation . ' - count', 1);
+//
