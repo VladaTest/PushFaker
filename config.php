@@ -2,7 +2,7 @@
 
 $config['cache_dir']     = '/var/log/databox';
 $config['max_clients']   = 2;
-$config['from_date_str'] = '-2 days';
+$config['from_date_str'] = '-30 days';
 $config['to_date_str']   = 'now';
 $config['granularity']   = 43200;
 $config['provider']      = 'percona';
