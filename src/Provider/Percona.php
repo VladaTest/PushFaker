@@ -6,13 +6,22 @@ use Provider;
 
 class Percona extends Provider
 {
-    const DB_IP   = '172.17.0.4';
-    const DB_USER = 'test1';
-    const DB_PASS = '***';
+    private $ip;
+    private $username;
+    private $password;
+
+    public function __construct($data)
+    {
+        parent::__construct($data);
+
+        $this->ip       = config()->db['ip'];
+        $this->username = config()->db['username'];
+        $this->password = config()->db['password'];
+    }
 
     public function runPush($data)
     {
-        $con = mysqli_connect(self::DB_IP, self::DB_USER, self::DB_PASS);
+        $con = mysqli_connect($this->ip, $this->username, $this->password);
         if (!$con) {
             die('Could not connect: ' . mysql_error());
         }
@@ -32,7 +41,7 @@ class Percona extends Provider
 
     public function runSelect1($data)
     {
-        $con = mysqli_connect(self::DB_IP, self::DB_USER, self::DB_PASS);
+        $con = mysqli_connect($this->ip, $this->username, $this->password);
         if (!$con) {
             die('Could not connect: ' . mysql_error());
         }
@@ -50,7 +59,7 @@ class Percona extends Provider
 
     public function runSelect2($data)
     {
-        $con = mysqli_connect(self::DB_IP, self::DB_USER, self::DB_PASS);
+        $con = mysqli_connect($this->ip, $this->username, $this->password);
         if (!$con) {
             die('Could not connect: ' . mysql_error());
         }
@@ -68,7 +77,7 @@ class Percona extends Provider
 
     public function runSelect3($data)
     {
-        $con = mysqli_connect(self::DB_IP, self::DB_USER, self::DB_PASS);
+        $con = mysqli_connect($this->ip, $this->username, $this->password);
         if (!$con) {
             die('Could not connect: ' . mysql_error());
         }
