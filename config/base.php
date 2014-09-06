@@ -12,8 +12,8 @@ $config['provider'] = 'dump';
 
 $config['db'] = [
 	'ip'       => '{DB_IP}',
-	'username' => '{DB_USERNAME}',
-	'password' => '{DB_PASSWORD}'
+	'username' => 'loadtester',
+	'password' => 'testing4fun'
 ];
 
 $config['operations'] = [
