@@ -75,5 +75,13 @@ abstract class Provider
         }
 
         $this->$method($data);
+
+        if (config()->debug) {
+            echo sprintf("[%s] %s %s\n",
+                date('Y-m-d H:i:s'),
+                $this->data['id'],
+                $method
+            );
+        }
     }
 }
