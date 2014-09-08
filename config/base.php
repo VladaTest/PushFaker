@@ -8,10 +8,10 @@ $config['from_date_str'] = '-30 days';
 $config['to_date_str']   = 'now';
 $config['granularity']   = 43200;
 
-$config['provider'] = 'dump';
+$config['provider'] = getenv('PROVIDER');
 
 $config['db'] = [
-	'ip'       => '{DB_IP}',
+	'ip'       => getenv('DB_IP'),
 	'username' => 'loadtester',
 	'password' => 'testing4fun'
 ];
