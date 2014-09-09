@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * ENVIRONMENT VARIABLE     Default
+ * =================================
+ *  PROVIDER                required
+ *  DB_IP                   required
+ *
+ *  CLIENTS_COUNT           1
+ *  LAST_X_DAYS             7
+ *  GRANULARITY             43200
+ *  AVG_KEYS_COUNT          100
+ *  AVG_ATTR_COUNT          10
+ */
+
 // Default errors
 error_reporting(E_ALL);
 
@@ -26,7 +39,7 @@ function config($file = 'config/base.php') {
 
 // create cache_dir
 if (!file_exists(config()->cache_dir)) {
-    mkdir(config()->cache_dir);
+    @mkdir(config()->cache_dir);
 }
 
 // Get clients
