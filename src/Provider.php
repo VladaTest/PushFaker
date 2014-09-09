@@ -2,9 +2,9 @@
 
 abstract class Provider
 {
-    const KPI_COUNT = 1;
-
     private $data;
+
+    private $faker;
 
     public static function factory($providerName, $data)
     {
@@ -20,17 +20,27 @@ abstract class Provider
 
     public function __construct($data)
     {
+        $this->faker = Faker\Factory::create();
         $this->setData($data);
     }
 
     public function setData($data)
     {
-        if (!isset($data['kpis'])) {
-            // Generate 100 Kpis
-            $faker = Faker\Factory::create();
-            for ($i = 0; $i < self::KPI_COUNT; $i++) {
-                $kpi            = strtolower(preg_replace('/[^a-zA-Z0-9]+/', '_', $faker->name));
-                $data['kpis'][] = trim($kpi, '_');
+        // Set raw values for keys
+        if (!isset($data['raw']['values'])) {
+            for ($i = 0; $i < rand(1, config()->raw_key_count); $i++) {
+                $keys = array_slice(config()->raw_key_values, rand(0, count(config()->raw_key_values) -1));
+                foreach ($keys as $key) {
+                    $data['raw']['values'][] = "{$key}$i";
+                }
+            }
+        }
+
+        // Generate attributes
+        if (!isset($data['raw']['attributes'])) {
+            for ($i = 0; $i < rand(1, config()->raw_attributes_count); $i++) {
+                $attribute                   = strtolower(preg_replace('/[^a-zA-Z0-9]+/', '_', $this->faker->name));
+                $data['raw']['attributes'][] = trim($attribute, '_');
             }
         }
 
@@ -56,14 +66,37 @@ abstract class Provider
 
             $end = new \DateTime();
 
+            $payloads = [];
+            foreach ($data['raw']['values'] as $key) {
+                // Init. null will be replaced with value in next step
+                $payloads[$key] = [
+                    $key => null
+                ];
+
+                // Add attributes
+                $attributes = array_slice($data['raw']['attributes'], rand(0, count($data['raw']['attributes']) -1));
+                $indx = 0;
+                while ($indx < count($attributes)) {
+                    $att = $attributes[$indx];
+                    if (rand(0,1000) % 2 === 0 && $indx < count($attributes) -1) {
+                        $payloads[$key][$att]        = [];
+                        $att2                        = $attributes[++$indx];
+                        $payloads[$key][$att][$att2] = $this->faker->country;
+                    } else {
+                        $payloads[$key][$att] = $this->faker->country;
+                    }
+
+                    $indx++;
+                }
+            }
+
             $rangeInterval = "PT{$data['granularity']}S";
             while ($start <= $end) {
-                foreach ($data['kpis'] as $kpi) {
-                    $data['data'][] = [
-                        'key'   => $kpi,
-                        'date'  => $start->format('Y-m-d H:i:s'),
-                        'value' => rand(10000, 1000000)
-                    ];
+                foreach ($payloads as $valueKey => &$pl) {
+                    $pl[$valueKey] = rand(10000, 1000000);
+                    $pl['date']    = $start->format('Y-m-d H:i:s');
+
+                    $data['data'][] = $pl;
                 }
                 $start->add(new \DateInterval($rangeInterval));
             }
