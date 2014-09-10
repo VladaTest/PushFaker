@@ -1,6 +1,6 @@
 <?php
 
-$config['debug'] = false;
+$config['debug'] = true;
 
 $config['cache_dir']     = '/var/log/databox';
 $config['max_clients']   = getenv('CLIENTS_COUNT') ?: 1;
