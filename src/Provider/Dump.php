@@ -17,10 +17,11 @@ class Dump extends Provider
         $client = new \Guzzle\Http\Client();
         $req    = $client->post('http://casandra1.cloudapp.net:8080');
         $req->setAuth($data['id'], '');
-        $req->setBody($payload, 'application/json');
-        $res = $req->send();
+        $req->setBody($payload);
+        $req->setHeader('Content-Type', 'application/json');
 
-        var_dump($res->getBody(true));exit;
+        $res = $req->send();
+        echo $data['id'], ' => ', $res->getBody(true), "\n";
     }
 
     public function runSelect1($data)
