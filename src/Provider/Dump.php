@@ -14,11 +14,13 @@ class Dump extends Provider
             'data' => $data['data']
         ]);
 
-        $filename = '/tmp/' . time() . '.json';
+        $client = new \Guzzle\Http\Client();
+        $req    = $client->post('http://casandra1.cloudapp.net:8080');
+        $req->setAuth($data['id'], '');
+        $req->setBody($payload, 'application/json');
+        $res = $req->send();
 
-        file_put_contents($filename, $payload);
-
-        // exec("curl -X POST http://requestb.in/10quws91 --data @$filename");
+        var_dump($res->getBody(true));exit;
     }
 
     public function runSelect1($data)

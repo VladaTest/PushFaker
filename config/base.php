@@ -16,6 +16,12 @@ $config['db'] = [
 	'password' => 'testing4fun'
 ];
 
+$config['db_source'] = [
+	'ip'       => getenv('DBS_IP'),
+	'username' => getenv('DBS_U'),
+	'password' => getenv('DBS_P')
+];
+
 $config['operations'] = [
     'push'    => 40,
     'select1' => 30,

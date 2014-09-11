@@ -49,9 +49,29 @@ $client     = null;
 $clientData = null;
 $operation  = null;
 
+// Load client from DB
+$con = mysqli_connect(config()->db_source['ip'], config()->db_source['username'], config()->db_source['password']);
+if (!$con) {
+    die('Could not connect: ' . mysql_error());
+}
+
+mysqli_select_db($con, 'test');
+mysqli_set_charset($con,'utf8');
+
+$sql = "SELECT * FROM `z`.`space_access` LIMIT " . config()->max_clients;
+$res = mysqli_query($con, $sql);
+
+$_clients = [];
+while ($myrow = $res->fetch_array(MYSQLI_ASSOC)) {
+    $_clients[] = $myrow;
+}
+
+$res->close();
+$con->close();
+
 if (count($clients) < config()->max_clients) {
     // Create new client
-    $client     = bin2hex(openssl_random_pseudo_bytes(16));
+    $client     = $_clients[0]['token'];
     $clientData = [
         'id'          => $client,
         'created'     => date('Y-m-d H:i:s'),

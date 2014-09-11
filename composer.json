@@ -1,7 +1,8 @@
 {
     "require": {
         "fzaninotto/faker": "~1.4",
-        "phpunit/php-timer": "~1"
+        "phpunit/php-timer": "~1",
+        "guzzle/guzzle": "~3.8"
     },
     "autoload": {
         "psr-0": {
