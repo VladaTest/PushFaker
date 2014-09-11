@@ -58,20 +58,24 @@ if (!$con) {
 mysqli_select_db($con, 'test');
 mysqli_set_charset($con,'utf8');
 
-$sql = "SELECT * FROM `z`.`space_access` LIMIT " . config()->max_clients;
-$res = mysqli_query($con, $sql);
-
-$_clients = [];
-while ($myrow = $res->fetch_array(MYSQLI_ASSOC)) {
-    $_clients[] = $myrow;
-}
-
+$sql = "SELECT token
+    FROM `z`.`space_access` AS sa1 JOIN
+        (SELECT (RAND() *
+            (SELECT MAX(space_access_id)
+                FROM `z`.`space_access`
+            )
+        ) AS space_access_id) AS sa2
+    WHERE sa1.space_access_id >= sa2.space_access_id
+    ORDER BY sa1.space_access_id ASC
+    LIMIT 1";
+$res   = mysqli_query($con, $sql);
+$myrow = $res->fetch_array(MYSQLI_ASSOC);
 $res->close();
 $con->close();
 
 if (count($clients) < config()->max_clients) {
     // Create new client
-    $client     = $_clients[0]['token'];
+    $client     = $myrow['token'];
     $clientData = [
         'id'          => $client,
         'created'     => date('Y-m-d H:i:s'),
