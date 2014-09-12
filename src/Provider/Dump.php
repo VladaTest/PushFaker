@@ -20,8 +20,7 @@ class Dump extends Provider
         $req->setBody($payload);
         $req->setHeader('Content-Type', 'application/json');
 
-        $res = $req->send();
-        echo $data['id'], ' => ', $res->getBody(true), "\n";
+        $client->sendAll([$req]);
     }
 
     public function runSelect1($data)
