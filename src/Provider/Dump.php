@@ -15,12 +15,18 @@ class Dump extends Provider
         ]);
 
         $client = new \GuzzleHttp\Client();
-        $req    = $client->createRequest('POST', 'http://casandra1.cloudapp.net:8080', [
+        // $req    = $client->createRequest('POST', 'http://casandra1.cloudapp.net:8080', [
+        //     'headers' => ['Content-Type' => 'application/json'],
+        //     'auth'    => [$data['id'], ''],
+        //     'body'    => $payload
+        // ]);
+        // $client->sendAll([$req]);
+
+        $client->post('http://casandra1.cloudapp.net:8080', [
             'headers' => ['Content-Type' => 'application/json'],
             'auth'    => [$data['id'], ''],
             'body'    => $payload
         ]);
-        $client->sendAll([$req]);
     }
 
     public function runSelect1($data)
