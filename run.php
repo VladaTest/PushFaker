@@ -109,6 +109,7 @@ $provider = Provider::factory(config()->provider, $clientData);
 PHP_Timer::start();
 $provider->run($operation);
 $time = PHP_Timer::stop();
+$time = round($time * 1000);
 
 // Save current status
 $clientData       = $provider->getData();
@@ -116,5 +117,5 @@ $clientData['to'] = date('Y-m-d H:i:s', time());
 file_put_contents(config()->cache_dir . '/' . $client, json_encode($clientData));
 
 // Push time + request
-StatsD::increment($operation . ' - count');
-StatsD::timing($operation . ' - response time', str_replace(' ms', '', PHP_Timer::secondsToTimeString($time)));
+StatsD::increment("{$operation}/count");
+StatsD::timing("{$operation}/response", $time);
