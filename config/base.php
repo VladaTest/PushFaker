@@ -24,9 +24,9 @@ $config['db_source'] = [
 
 $config['operations'] = [
     'push'    => 40,
-    'select1' => 30,
-    'select2' => 20,
-    'select3' => 10
+    // 'select1' => 30,
+    // 'select2' => 20,
+    // 'select3' => 10
 ];
 
 $config['raw_key_values'] = [
