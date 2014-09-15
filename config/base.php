@@ -3,10 +3,10 @@
 $config['debug'] = true;
 
 $config['cache_dir']     = '/var/log/databox';
-$config['max_clients']   = getenv('CLIENTS_COUNT') ?: 1;
-$config['from_date_str'] = '-' . (getenv('LAST_X_DAYS') ?: 7) . ' days';
+$config['max_clients']   = getenv('CLIENT_COUNT') ?: 1;
+$config['from_date_str'] = '-' . (getenv('HISTORY_X_DAYS') ?: 7) . ' days';
 $config['to_date_str']   = 'now';
-$config['granularity']   = getenv('GRANULARITY') ?: 43200;
+$config['granularity']   = getenv('HISTORY_GRANULARITY') ?: 43200;
 
 $config['provider'] = getenv('PROVIDER');
 
@@ -34,7 +34,7 @@ $config['raw_key_values'] = [
 ];
 
 // Avg. 300 value keys per client
-$config['raw_key_count'] = getenv('AVG_KEYS_COUNT') ?: 100;
+$config['raw_key_count'] = getenv('CLIENT_KEY_COUNT') ?: 100;
 
 // Avg. 10 attribute keys per client
-$config['raw_attributes_count'] = getenv('AVG_ATTR_COUNT') ?: 10;
+$config['raw_attributes_count'] = getenv('CLIENT_ATTR_COUNT') ?: 10;

@@ -6,11 +6,11 @@
  *  PROVIDER                required
  *  DB_IP                   required
  *
- *  CLIENTS_COUNT           1
- *  LAST_X_DAYS             7
- *  GRANULARITY             43200
- *  AVG_KEYS_COUNT          100
- *  AVG_ATTR_COUNT          10
+ *  CLIENT_COUNT            1
+ *  HISTORY_X_DAYS          7
+ *  HISTORY_GRANULARITY     43200
+ *  CLIENT_KEY_COUNT        100
+ *  CLIENT_ATTR_COUNT       10
  */
 
 // Default errors
