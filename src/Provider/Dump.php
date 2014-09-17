@@ -24,7 +24,7 @@ class Dump extends Provider
 
         $client->post('http://casandra1.cloudapp.net:8080', [
             'headers' => ['Content-Type' => 'application/json'],
-            'auth'    => [$data['id'], ''],
+            'auth'    => [$data['token'], ''],
             'body'    => $payload
         ]);
     }

@@ -81,8 +81,7 @@ if (count($clients) < config()->max_clients) {
     $clientData = [
         'space_access_id' => $myrow['space_access_id'],
         'space_id'        => $myrow['space_id'],
-
-        'id'              => $client,
+        'token'           => $client,
         'created'         => date('Y-m-d H:i:s'),
         'from'            => date('Y-m-d H:i:s', strtotime(config()->from_date_str)),
         'granularity'     => config()->granularity
