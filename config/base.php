@@ -23,8 +23,8 @@ $config['db_source'] = [
 ];
 
 $config['operations'] = [
-    'push'    => 40,
-    // 'select1' => 30,
+    'push'    => 50,
+    'select1' => 50,
     // 'select2' => 20,
     // 'select3' => 10
 ];
