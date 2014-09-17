@@ -11,7 +11,7 @@ $config['granularity']   = getenv('HISTORY_GRANULARITY') ?: 43200;
 $config['provider'] = getenv('PROVIDER');
 
 $config['db'] = [
-	'ip'       => explode(',' getenv('DB_IP')),
+	'ip'       => explode(',', getenv('DB_SERVER_IP')),
 	'username' => 'loadtester',
 	'password' => 'testing4fun'
 ];
