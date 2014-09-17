@@ -58,7 +58,7 @@ if (!$con) {
 mysqli_select_db($con, 'test');
 mysqli_set_charset($con,'utf8');
 
-$sql = "SELECT space_access_id, space_id, token
+$sql = "SELECT sa1.space_access_id, sa1.space_id, sa1.token
     FROM `z`.`space_access` AS sa1 JOIN
         (SELECT (RAND() *
             (SELECT MAX(space_access_id)
@@ -68,8 +68,10 @@ $sql = "SELECT space_access_id, space_id, token
     WHERE sa1.space_access_id >= sa2.space_access_id
     ORDER BY sa1.space_access_id ASC
     LIMIT 1";
+
 $res   = mysqli_query($con, $sql);
 $myrow = $res->fetch_array(MYSQLI_ASSOC);
+
 $res->close();
 $con->close();
 
