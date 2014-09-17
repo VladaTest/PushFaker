@@ -44,6 +44,10 @@ abstract class Provider
             }
         }
 
+        if (!isset($data['names'])) {
+            $data['names'] = [];
+        }
+
         $this->data = $data;
     }
 
@@ -82,8 +86,18 @@ abstract class Provider
                         $payloads[$key][$att]        = [];
                         $att2                        = $attributes[++$indx];
                         $payloads[$key][$att][$att2] = $this->faker->country;
+
+                        $k = trim($key, '$') . "|{$att}|{$att2}";
+                        $v = $payloads[$key][$att][$att2];
                     } else {
                         $payloads[$key][$att] = $this->faker->country;
+
+                        $k = trim($key, '$') . "|{$att}";
+                        $v = $payloads[$key][$att];
+                    }
+
+                    if (!isset($this->data['names'][$k])) {
+                        $this->data['names'][$k][] = $v;
                     }
 
                     $indx++;
@@ -112,7 +126,7 @@ abstract class Provider
         if (config()->debug) {
             echo sprintf("[%s] %s %s\n",
                 date('Y-m-d H:i:s'),
-                $this->data['id'],
+                $this->data['token'],
                 $method
             );
         }
