@@ -58,7 +58,7 @@ if (!$con) {
 mysqli_select_db($con, 'test');
 mysqli_set_charset($con,'utf8');
 
-$sql = "SELECT token
+$sql = "SELECT space_access_id, space_id, token
     FROM `z`.`space_access` AS sa1 JOIN
         (SELECT (RAND() *
             (SELECT MAX(space_access_id)
@@ -77,10 +77,13 @@ if (count($clients) < config()->max_clients) {
     // Create new client
     $client     = $myrow['token'];
     $clientData = [
-        'id'          => $client,
-        'created'     => date('Y-m-d H:i:s'),
-        'from'        => date('Y-m-d H:i:s', strtotime(config()->from_date_str)),
-        'granularity' => config()->granularity
+        'space_access_id' => $myrow['space_access_id'],
+        'space_id'        => $myrow['space_id'],
+
+        'id'              => $client,
+        'created'         => date('Y-m-d H:i:s'),
+        'from'            => date('Y-m-d H:i:s', strtotime(config()->from_date_str)),
+        'granularity'     => config()->granularity
     ];
 
     $operation = 'push';
