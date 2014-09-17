@@ -2,7 +2,8 @@
     "require": {
         "fzaninotto/faker": "~1.4",
         "phpunit/php-timer": "~1",
-        "guzzlehttp/guzzle": "4.*"
+        "guzzlehttp/guzzle": "4.*",
+        "evseevnn/php-cassandra-binary": "~0.1"
     },
     "autoload": {
         "psr-0": {
