@@ -3,40 +3,43 @@
 namespace Provider;
 
 use Provider;
+use Z\Calculations\KPIsUpdater;
+use Z\Loader\DataLoader;
+use Z\Loader\MetricDBLoader;
+use Z\DB\Map\Block;
+use Z\DB\Map\Board;
+use Z\DB\Map\MetricSetting;
+use Z\DB\Factory;
+use Z\Loader\SettingsLoader;
+use Z\Calculations\KPICalculations;
+use Z\DB\Map\Metric;
 
 class Cassandra extends Dump
 {
     public function runSelect1($data)
     {
-        $table    = str_pad($data['space_id'],6,'0',STR_PAD_LEFT);
-        $nodes    = config()->db['ip'];
-        $database = new \Cassandra\Database($nodes, 'dbtesting');
-        $database->connect();
+        $kpisUpdater = new KPIsUpdater();
 
-        foreach ($data["raw"]["values"] as $key) {
-            foreach ($data["raw"]["attributes"] as $key_attr) {
-                $queries[] = str_replace("$", "", "{$data['space_access_id']}|".$key)."_".$key_attr;
-            }
+        // 2. Create settings loader and apply it to the updater
+        $settingsLoader = new SettingsLoader($data['space_id']);
+        $kpisUpdater->setSettingsLoader($settingsLoader);
 
-            $queries[] = str_replace("$", "", "{$data['space_access_id']}|".$key);
-        }
+        // 3. create the data loader and add custom loaders in its loaders chain
+        $dataLoader = new DataLoader($data['space_id']);
+        $warehouseLoader = new MetricDBLoader($data['space_id']);
 
-        for ($i=0;$i<30;$i++) {
-            $final_result =0;
-            $key  = $queries[rand(0,(count($queries)-1))];
-            $from = date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s")." -".rand(3,50000)." min"));
-            $to   = date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s")));
-            $sql  = 'SELECT v FROM space'.$table.' WHERE k= \''.$key.'\' AND n=\'\' AND d>=\''.$from.'\' AND  d<= \''.$to.'\'';
+        // Tukaj boš uporabil loader za Cassandro
+        $cassandraLoader = new \Z\Loader\Cassandra\MetricLoader($data['space_id']);
+        $dataLoader->addLoaderToChain($cassandraLoader);
 
-            //echo "<br />".$sql;
-            $data         = $database->query($sql, []);
-            $final_result = 0;
-            foreach($data as $row) {
-                $final_result += $row["v"];
-            }
+        $kpisUpdater->setDataLoader($dataLoader);
 
-            echo "  FINAL RESULT : $final_result\n    $key\n";
-        }
+        // 5. Create DAO for saving the KPIs and apply it to the updater
+        $kpiDAO = Factory::createKpiDAO();
+        $kpisUpdater->setKpiDao($kpiDAO);
+
+        // 6. perform the update
+        $kpisUpdater->updateKPIsForKeys($data['board_kpi']);
     }
 
     public function runSelect2($data)
