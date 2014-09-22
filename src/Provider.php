@@ -67,6 +67,8 @@ abstract class Provider
             $data = $this->createBoard($data);
         }
 
+        echo "Select KPI: {$data['board_kpi']}\n";
+
         $this->data = $data;
     }
 
