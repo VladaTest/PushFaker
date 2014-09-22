@@ -67,8 +67,6 @@ abstract class Provider
             $data = $this->createBoard($data);
         }
 
-        echo "Select KPI: {$data['board_kpi'][0]}\n";
-
         $this->data = $data;
     }
 
@@ -102,21 +100,21 @@ abstract class Provider
             ->setGranularityIsFixed(true)
             ->setBoard($board);
 
-        $indx = array_rand($data['raw']['values']);
-        $key  = "{$data['space_access_id']}|" . trim($data['raw']['values'][$indx], '$');
+        $metricSettingDao  = Factory::createMetricSettingDAO();
+        $data['board_kpi'] = [];
 
-        $data['board_kpi'] = [$key];
-
-        $metricSetting = new MetricSetting();
-        $metricSetting
-            ->setBlock($block)
-            ->setMetricKey($key)
-            ->setGranularity(MetricSetting::GRANULARITY_DAY)
-            ->setGranularityPoints(7)
-            ->setSpaceId($data['space_id']);
-
-        $metricSettingDao = Factory::createMetricSettingDAO();
-        $metricSettingDao->save($metricSetting);
+        foreach ($data['raw']['values'] as $value) {
+            $key                 = "{$data['space_access_id']}|" . trim($value, '$');
+            $data['board_kpi'][] = $key;
+            $metricSetting       = new MetricSetting();
+            $metricSetting
+                ->setBlock($block)
+                ->setMetricKey($key)
+                ->setGranularity(MetricSetting::GRANULARITY_DAY)
+                ->setGranularityPoints(7)
+                ->setSpaceId($data['space_id']);
+            $metricSettingDao->save($metricSetting);
+        }
 
         return $data;
     }
