@@ -1,10 +1,19 @@
 {
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/databox/Framework"
+        }
+    ],
     "require": {
         "fzaninotto/faker": "~1.4",
         "phpunit/php-timer": "~1",
         "guzzlehttp/guzzle": "4.*",
-        "evseevnn/php-cassandra-binary": "~0.1"
+        "evseevnn/php-cassandra-binary": "~0.1",
+        "doctrine/orm": "*",
+        "databox/Framework":"dev-data_modeling"
     },
+    "minimum-stability": "dev",
     "autoload": {
         "psr-0": {
             "": "src"
