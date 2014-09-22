@@ -24,6 +24,7 @@ define('PATH', realpath(__DIR__) . '/');
 
 require('vendor/autoload.php');
 require('StatsD.php');
+require('src/color.php');
 
 function config($file = 'config/base.php') {
     static $configs = [];
@@ -111,6 +112,12 @@ if (null === $operation) {
 $provider = Provider::factory(config()->provider, $clientData);
 
 $time = $provider->run($operation);
+echo "\n  S time: ";
+if ($time > 5000) {
+    _red($time);
+} else {
+    _say($time);
+}
 
 // Save current status
 $clientData       = $provider->getData();
