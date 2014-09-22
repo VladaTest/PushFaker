@@ -192,7 +192,7 @@ abstract class Provider
         $tStart = microtime(true);
         $this->$method($data);
         $tEnd   = microtime(true) - $tStart;
-        $time   = round($time * 1000, 4);
+        $time   = round($tEnd * 1000, 4);
 
         if (config()->debug) {
             echo sprintf("[%s] %s %s\n",
