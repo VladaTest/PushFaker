@@ -107,12 +107,13 @@ abstract class Provider
             $key                 = "{$data['space_access_id']}|" . trim($value, '$');
             $data['board_kpi'][] = $key;
             $metricSetting       = new MetricSetting();
-            $metricSetting
+            $metricSetting       = $metricSetting
                 ->setBlock($block)
                 ->setMetricKey($key)
                 ->setGranularity(MetricSetting::GRANULARITY_DAY)
                 ->setGranularityPoints(7)
                 ->setSpaceId($data['space_id']);
+
             $metricSettingDao->save($metricSetting);
         }
 
