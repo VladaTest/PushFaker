@@ -16,6 +16,10 @@ $config['db'] = [
 	'password' => 'testing4fun'
 ];
 
+$config['cassandra'] = [
+	'ip' => explode(',', getenv('DB_SERVER_IP'))
+];
+
 $config['db_source'] = [
 	'ip'       => getenv('DBS_IP'),
 	'username' => getenv('DBS_U'),
@@ -38,3 +42,19 @@ $config['raw_key_count'] = getenv('CLIENT_KEY_COUNT') ?: 100;
 
 // Avg. 10 attribute keys per client
 $config['raw_attributes_count'] = getenv('CLIENT_ATTR_COUNT') ?: 10;
+
+//----------------------------------------
+$config['DAO'] = [
+    'current_factory' => 'Doctrine',
+    'is_dev_mode'     => false
+];
+
+$config['database'] = [
+    'dns'      => "mysql:host={$config['db_source']['ip']};port=3306",
+    'username' => $config['db_source']['username'],
+    'password' => $config['db_source']['password'],
+    'host'     => $config['db_source']['ip'],
+    'port'     => 3306,
+    'params'   => [],
+    'dbname'   => 'z'
+];

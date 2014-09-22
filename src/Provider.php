@@ -1,5 +1,16 @@
 <?php
 
+use Z\Calculations\KPIsUpdater;
+use Z\Loader\DataLoader;
+use Z\Loader\MetricDBLoader;
+use Z\DB\Map\Block;
+use Z\DB\Map\Board;
+use Z\DB\Map\MetricSetting;
+use Z\DB\Factory;
+use Z\Loader\SettingsLoader;
+use Z\Calculations\KPICalculations;
+use Z\DB\Map\Metric;
+
 abstract class Provider
 {
     private $data;
@@ -26,6 +37,10 @@ abstract class Provider
 
     public function setData($data)
     {
+        $isNewClient = !isset($data['raw']['values'])
+            || !isset($data['raw']['attributes'])
+            || !isset($data['names']);
+
         // Set raw values for keys
         if (!isset($data['raw']['values'])) {
             for ($i = 0; $i < rand(1, config()->raw_key_count); $i++) {
@@ -48,7 +63,60 @@ abstract class Provider
             $data['names'] = [];
         }
 
+        if ($isNewClient) {
+            $data = $this->createBoard($data);
+        }
+
         $this->data = $data;
+    }
+
+    protected function createBoard($data)
+    {
+        $metricDao = Factory::createMetricDAO();
+
+        $board = new Board();
+        $board = $board
+            ->setName("testboard")
+            ->setCreated(new \DateTime('now'))
+            ->setCreatedBy("tester")
+            ->setModified(new \DateTime('now'))
+            ->setModifiedBy("tester")
+            ->setColor("#FFFFFF  ")
+            ->setIsRandom(false)
+            ->setOrder(1)
+            ->setSpaceId($data['space_id'])
+            ->setFromTemplate(1);
+
+        $block = new Block();
+        $block = $block
+            ->setName("testblock")
+            ->setType(2)
+            ->setCreated(new \DateTime('now'))
+            ->setCreatedBy("tester")
+            ->setModified(new \DateTime('now'))
+            ->setModifiedBy("tester")
+            ->setGranularity(86400)
+            ->setGranularityPoints(7)
+            ->setGranularityIsFixed(true)
+            ->setBoard($board);
+
+        $indx = array_rand($data['raw']['values']);
+        $key  = "{$data['space_access_id']}|" . trim($data['raw']['values'][$indx], '$');
+
+        $data['board_kpi'] = [$key];
+
+        $metricSetting = new MetricSetting();
+        $metricSetting
+            ->setBlock($block)
+            ->setMetricKey($key)
+            ->setGranularity(MetricSetting::GRANULARITY_DAY)
+            ->setGranularityPoints(7)
+            ->setSpaceId($data['space_id']);
+
+        $metricSettingDao = Factory::createMetricSettingDAO();
+        $metricSettingDao->save($metricSetting);
+
+        return $data;
     }
 
     public function getData()

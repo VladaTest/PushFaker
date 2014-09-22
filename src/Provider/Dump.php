@@ -22,6 +22,8 @@ class Dump extends Provider
         // ]);
         // $client->sendAll([$req]);
 
+        echo "Space ID: {$data['space_id']}\n";
+
         $client->post('http://casandra1.cloudapp.net:8080', [
             'headers' => ['Content-Type' => 'application/json'],
             'auth'    => [$data['token'], ''],
