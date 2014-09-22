@@ -189,7 +189,10 @@ abstract class Provider
             throw new Exception("Method $method doesn't exist.");
         }
 
+        PHP_Timer::start();
         $this->$method($data);
+        $time = PHP_Timer::stop();
+        $time = round($time * 1000);
 
         if (config()->debug) {
             echo sprintf("[%s] %s %s\n",
@@ -198,5 +201,7 @@ abstract class Provider
                 $method
             );
         }
+
+        return $time;
     }
 }

@@ -110,10 +110,7 @@ if (null === $operation) {
 
 $provider = Provider::factory(config()->provider, $clientData);
 
-PHP_Timer::start();
-$provider->run($operation);
-$time = PHP_Timer::stop();
-$time = round($time * 1000);
+$time = $provider->run($operation);
 
 // Save current status
 $clientData       = $provider->getData();
