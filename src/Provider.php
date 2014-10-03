@@ -6,7 +6,7 @@ use Z\Loader\MetricDBLoader;
 use Z\DB\Map\Block;
 use Z\DB\Map\Board;
 use Z\DB\Map\MetricSetting;
-use Z\DB\Factory;
+use Z\DB\DAOFactory;
 use Z\Loader\SettingsLoader;
 use Z\Calculations\KPICalculations;
 use Z\DB\Map\Metric;
@@ -72,7 +72,8 @@ abstract class Provider
 
     protected function createBoard($data)
     {
-        $metricDao = Factory::createMetricDAO();
+        $factory   = DAOFactory::getInstance('Doctrine');
+        $metricDao = $factory->createMetric();
 
         $board = new Board();
         $board = $board
