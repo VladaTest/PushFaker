@@ -9,7 +9,7 @@ use Z\Loader\MetricDBLoader;
 use Z\DB\Map\Block;
 use Z\DB\Map\Board;
 use Z\DB\Map\MetricSetting;
-use Z\DB\Factory;
+use Z\DB\DAOFactory;
 use Z\Loader\SettingsLoader;
 use Z\Calculations\KPICalculations;
 use Z\DB\Map\Metric;
@@ -35,7 +35,8 @@ class Cassandra extends Dump
         $kpisUpdater->setDataLoader($dataLoader);
 
         // 5. Create DAO for saving the KPIs and apply it to the updater
-        $kpiDAO = Factory::createKpiDAO();
+        $factory = DAOFactory::getInstance('Doctrine');
+        $kpiDAO  = $factory->createKpi();
         $kpisUpdater->setKpiDao($kpiDAO);
 
         // 6. perform the update
